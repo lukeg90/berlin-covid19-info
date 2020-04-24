@@ -41,6 +41,7 @@ export default {
 }
 
 #nav {
+    width: 100vw;
     padding: 30px;
     background: whitesmoke;
     text-align: center;

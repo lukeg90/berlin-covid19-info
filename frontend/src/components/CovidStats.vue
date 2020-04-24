@@ -30,7 +30,7 @@ export default {
     },
     mounted() {
         axios
-            .get("http://localhost:3000/covid-stats")
+            .get(`${process.env.VUE_APP_API_URL}/covid-stats`)
             .then(response => {
                 console.log("RKI data: ", response.data);
                 this.stats = response.data.berlinStats;
