@@ -1,6 +1,10 @@
 <template>
     <div class="home">
-        <img src="/jumbotron.jpg" alt="empty-hauptbahnhof" class="jumbotron" />
+        <img
+            src="../assets/jumbotron.jpg"
+            alt="empty-hauptbahnhof"
+            class="jumbotron"
+        />
         <div class="title"><h1>COVID-19 Information Berlin</h1></div>
     </div>
 </template>

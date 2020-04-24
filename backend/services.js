@@ -24,7 +24,7 @@ exports.findPlaceByText = textQuery => {
                 language: "en",
                 fields:
                     "formatted_address,geometry,icon,name,permanently_closed,photos,place_id,plus_code,types",
-                locationbias: "circle:5000@52.520008,13.404954"
+                locationbias: "circle:10000@52.520008,13.404954"
             }
         }
     );

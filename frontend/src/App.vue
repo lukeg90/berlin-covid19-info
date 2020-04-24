@@ -51,7 +51,7 @@ export default {
     font-weight: bold;
     text-decoration: none;
     color: black;
-    padding: 50px;
+    padding: 30px;
 }
 
 #nav a.router-link-exact-active {
