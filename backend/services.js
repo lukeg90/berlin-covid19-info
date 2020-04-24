@@ -13,18 +13,32 @@ exports.berlinCovidStats = () => {
     return axios.get("https://rki-covid-api.now.sh/api/states");
 };
 
-exports.findPlaceByText = textQuery => {
+exports.placeSearch = placeQuery => {
     return axios.get(
         "https://maps.googleapis.com/maps/api/place/findplacefromtext/json",
         {
             params: {
                 key: API_KEY,
-                input: textQuery,
+                input: placeQuery,
                 inputtype: "textquery",
                 language: "en",
-                fields:
-                    "formatted_address,geometry,icon,name,permanently_closed,photos,place_id,plus_code,types",
+                fields: "formatted_address,geometry,name,place_id,types",
                 locationbias: "circle:10000@52.520008,13.404954"
+            }
+        }
+    );
+};
+
+exports.textSearch = textQuery => {
+    return axios.get(
+        "https://maps.googleapis.com/maps/api/place/textsearch/json",
+        {
+            params: {
+                key: API_KEY,
+                query: textQuery,
+                location: "52.520008,13.404954",
+                radius: "10000",
+                language: "en"
             }
         }
     );

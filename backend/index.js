@@ -23,12 +23,22 @@ app.get("/covid-stats", async (req, res) => {
     }
 });
 
-app.get("/place/:textquery", async (req, res) => {
-    console.log("params: ", req.params.textquery);
+app.get("/place/specific/:placequery", async (req, res) => {
+    console.log("params: ", req.params.placequery);
     try {
-        const { data } = await services.findPlaceByText(req.params.textquery);
-        console.log("get place by query response: ", data);
+        const { data } = await services.placeSearch(req.params.placequery);
+        console.log("place search response: ", data);
         res.json({ places: data.candidates });
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+app.get("/place/general/:textquery", async (req, res) => {
+    try {
+        const { data } = await services.textSearch(req.params.textquery);
+        console.log("text search response: ", data.results);
+        res.json({ places: data.results });
     } catch (err) {
         console.log(err);
     }
@@ -38,7 +48,7 @@ app.get("/place/details/:id", async (req, res) => {
     try {
         const { data } = await services.getPlaceDetails(req.params.id);
         console.log("get place details response: ", data);
-        res.json({ details: data });
+        res.json({ details: data.result });
     } catch (err) {
         console.log(err);
     }

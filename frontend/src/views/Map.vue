@@ -3,17 +3,24 @@
         <form>
             <input
                 type="text"
-                id="mapquery"
-                placeholder="Search for place"
+                id="placeSearch"
+                placeholder="Search for a specific place"
                 v-model="placeSearchQuery"
             />
             <button @click.prevent="placeSearch">Submit</button>
+            <input
+                type="text"
+                id="textSearch"
+                placeholder="Search for a type of place"
+                v-model="textSearchQuery"
+            />
+            <button @click.prevent="textSearch">Submit</button>
         </form>
         <div class="map-container">
             <div class="search-results-container">
                 <div
                     class="search-result"
-                    v-for="result in placeSearchResults"
+                    v-for="result in searchResults"
                     :key="result.place_id"
                     @click="getPlaceDetails(result)"
                 >
@@ -45,21 +52,19 @@ export default {
         return {
             map: "",
             placeSearchQuery: "",
-            placeSearchResults: []
+            textSearchQuery: "",
+            searchResults: [],
+            placeDetails: {}
         };
     },
     async mounted() {
         try {
             const google = await googleInit();
-            // const geocoder = new google.maps.Geocoder();
             const map = new google.maps.Map(document.querySelector(".map"), {
+                // center on Berlin
                 center: { lat: 52.52, lng: 13.405 },
                 zoom: 11,
                 streetViewControl: false
-                // zoomControl: false,
-                // scrollwheel: false,
-                // scaleControl: false,
-                // gestureHandling: "none",
             });
             // prevent user zooming out of Berlin
             map.setOptions({ minZoom: 11 });
@@ -72,28 +77,56 @@ export default {
         placeSearch: function() {
             axios
                 .get(
-                    `${process.env.VUE_APP_API_URL}/place/${this.placeSearchQuery}`
+                    `${process.env.VUE_APP_API_URL}/place/specific/${this.placeSearchQuery}`
                 )
                 .then(({ data }) => {
-                    console.log("Search data: ", data.places);
+                    console.log("Place search data: ", data.places);
                     // add results to search results div
-                    this.placeSearchResults = data.places;
+                    this.searchResults = data.places;
                     // add markers to map?
-                    data.places.forEach(place => {
-                        let marker = new google.maps.Marker({
-                            position: place.geometry.location,
-                            map: this.map
-                        });
-                    });
+                    // data.places.forEach(place => {
+                    //     let marker = new google.maps.Marker({
+                    //         position: place.geometry.location,
+                    //         map: this.map
+                    //     });
+                    // });
                     this.placeSearchQuery = "";
                 })
                 .catch(err => {
                     console.log("Error in place search: ", err);
                 });
         },
+        textSearch: function() {
+            axios
+                .get(
+                    `${process.env.VUE_APP_API_URL}/place/general/${this.textSearchQuery}`
+                )
+                .then(({ data }) => {
+                    console.log("Text search data: ", data.places);
+                    this.searchResults = data.places;
+                    this.textSearchQuery = "";
+                })
+                .catch(err => {
+                    console.log("Error in text search: ", err);
+                });
+        },
         getPlaceDetails: function(place) {
             // pan to location, set zoom
+            console.log("place: ", place.name);
+            this.map.panTo(place.geometry.location);
+            this.map.setZoom(18);
             // call backend
+            axios
+                .get(
+                    `${process.env.VUE_APP_API_URL}/place/details/${place.place_id}`
+                )
+                .then(({ data }) => {
+                    console.log("Place details: ", data.details);
+                    this.placeDetails = data.details;
+                })
+                .catch(err => {
+                    console.log("Error getting place details: ", err);
+                });
         }
     }
 };
@@ -112,6 +145,7 @@ export default {
     flex-direction: column;
     height: 100%;
     width: 40%;
+    overflow-y: scroll;
 }
 
 .search-result {

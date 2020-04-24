@@ -1,7 +1,9 @@
 <template>
     <div id="app" @click="showStats = false">
         <div id="nav">
-            <router-link to="/">Home</router-link>
+            <router-link to="/" @click.native.stop="showStats = true"
+                >Home</router-link
+            >
             <router-link to="/about">About</router-link>
             <router-link to="/map">Map</router-link>
             <a href="javascript:void(0)" @click.stop="showStats = !showStats"
@@ -22,7 +24,7 @@ export default {
     },
     data: () => {
         return {
-            showStats: false
+            showStats: true
         };
     }
 };
