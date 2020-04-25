@@ -54,7 +54,8 @@ export default {
             placeSearchQuery: "",
             textSearchQuery: "",
             searchResults: [],
-            placeDetails: {}
+            placeDetails: {},
+            markers: []
         };
     },
     async mounted() {
@@ -74,7 +75,37 @@ export default {
         }
     },
     methods: {
+        setMapOnAll: function(map) {
+            this.markers.forEach(marker => marker.setMap(map));
+        },
+        clearMarkers: function() {
+            this.setMapOnAll(null);
+        },
+        showMarkers: function() {
+            this.setMapOnAll(this.map);
+        },
+        deleteMarkers: function() {
+            this.clearMarkers();
+            this.markers = [];
+        },
+        addMarkers: function(places) {
+            let infowindow = new google.maps.InfoWindow();
+            places.forEach(place => {
+                let marker = new google.maps.Marker({
+                    position: place.geometry.location,
+                    map: this.map
+                });
+                this.markers.push(marker);
+                let self = this;
+                // add click event listener to marker which gets place details and opens info window
+                marker.addListener("click", function() {
+                    // get place details on click
+                    self.getPlaceDetails(place);
+                });
+            });
+        },
         placeSearch: function() {
+            this.deleteMarkers();
             axios
                 .get(
                     `${process.env.VUE_APP_API_URL}/place/specific/${this.placeSearchQuery}`
@@ -84,12 +115,7 @@ export default {
                     // add results to search results div
                     this.searchResults = data.places;
                     // add markers to map?
-                    // data.places.forEach(place => {
-                    //     let marker = new google.maps.Marker({
-                    //         position: place.geometry.location,
-                    //         map: this.map
-                    //     });
-                    // });
+                    this.addMarkers(this.searchResults);
                     this.placeSearchQuery = "";
                 })
                 .catch(err => {
@@ -97,6 +123,7 @@ export default {
                 });
         },
         textSearch: function() {
+            this.deleteMarkers();
             axios
                 .get(
                     `${process.env.VUE_APP_API_URL}/place/general/${this.textSearchQuery}`
@@ -104,6 +131,7 @@ export default {
                 .then(({ data }) => {
                     console.log("Text search data: ", data.places);
                     this.searchResults = data.places;
+                    this.addMarkers(this.searchResults);
                     this.textSearchQuery = "";
                 })
                 .catch(err => {
@@ -114,7 +142,8 @@ export default {
             // pan to location, set zoom
             console.log("place: ", place.name);
             this.map.panTo(place.geometry.location);
-            this.map.setZoom(18);
+            let infowindow = new google.maps.InfoWindow();
+            // this.map.setZoom(16);
             // call backend
             axios
                 .get(
@@ -123,6 +152,21 @@ export default {
                 .then(({ data }) => {
                     console.log("Place details: ", data.details);
                     this.placeDetails = data.details;
+                    // also want infowindow to appear on marker with click on place
+                    // need to find marker which matches location of place
+                    let markerMatch = this.markers.find(
+                        marker =>
+                            marker.position.lat() ==
+                                this.placeDetails.geometry.location.lat &&
+                            marker.position.lng() ==
+                                this.placeDetails.geometry.location.lng
+                    );
+                    console.log("marker match found? ", markerMatch);
+                    infowindow.setContent(
+                        `<div><strong>${this.placeDetails.name}</strong></div>`
+                    );
+                    infowindow.open(this.map, markerMatch);
+                    // call backend
                 })
                 .catch(err => {
                     console.log("Error getting place details: ", err);
