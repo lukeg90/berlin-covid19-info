@@ -55,7 +55,8 @@ export default {
             textSearchQuery: "",
             searchResults: [],
             placeDetails: {},
-            markers: []
+            markers: [],
+            infoWindow: ""
         };
     },
     async mounted() {
@@ -70,6 +71,7 @@ export default {
             // prevent user zooming out of Berlin
             map.setOptions({ minZoom: 11 });
             this.map = map;
+            this.createInfoWindow();
         } catch (err) {
             console.log("error intializing google maps API: ", err);
         }
@@ -89,7 +91,6 @@ export default {
             this.markers = [];
         },
         addMarkers: function(places) {
-            let infowindow = new google.maps.InfoWindow();
             places.forEach(place => {
                 let marker = new google.maps.Marker({
                     position: place.geometry.location,
@@ -103,6 +104,11 @@ export default {
                     self.getPlaceDetails(place);
                 });
             });
+        },
+        createInfoWindow: function() {
+            // storing in data property ensures that only one info window can be open at any time
+            let infowindow = new google.maps.InfoWindow();
+            this.infoWindow = infowindow;
         },
         placeSearch: function() {
             this.deleteMarkers();
@@ -142,7 +148,6 @@ export default {
             // pan to location, set zoom
             console.log("place: ", place.name);
             this.map.panTo(place.geometry.location);
-            let infowindow = new google.maps.InfoWindow();
             // this.map.setZoom(16);
             // call backend
             axios
@@ -154,6 +159,7 @@ export default {
                     this.placeDetails = data.details;
                     // also want infowindow to appear on marker with click on place
                     // need to find marker which matches location of place
+                    console.log("Marker position: ", this.markers[0].position);
                     let markerMatch = this.markers.find(
                         marker =>
                             marker.position.lat() ==
@@ -162,11 +168,10 @@ export default {
                                 this.placeDetails.geometry.location.lng
                     );
                     console.log("marker match found? ", markerMatch);
-                    infowindow.setContent(
+                    this.infoWindow.setContent(
                         `<div><strong>${this.placeDetails.name}</strong></div>`
                     );
-                    infowindow.open(this.map, markerMatch);
-                    // call backend
+                    this.infoWindow.open(this.map, markerMatch);
                 })
                 .catch(err => {
                     console.log("Error getting place details: ", err);
