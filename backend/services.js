@@ -53,7 +53,7 @@ exports.getPlaceDetails = placeId => {
                 place_id: placeId,
                 language: "en",
                 fields:
-                    "address_component,adr_address,business_status,formatted_address,geometry,icon,name,permanently_closed,photo,place_id,plus_code,type,url,utc_offset,vicinity"
+                    "address_component,adr_address,business_status,formatted_address,geometry,icon,name,permanently_closed,photo,place_id,plus_code,type,url,utc_offset,vicinity,website"
             }
         }
     );

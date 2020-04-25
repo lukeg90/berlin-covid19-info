@@ -1,21 +1,28 @@
 <template>
     <div>
-        <form>
-            <input
-                type="text"
-                id="placeSearch"
-                placeholder="Search for a specific place"
-                v-model="placeSearchQuery"
-            />
-            <button @click.prevent="placeSearch">Submit</button>
-            <input
-                type="text"
-                id="textSearch"
-                placeholder="Search for a place"
-                v-model="textSearchQuery"
-            />
-            <button @click.prevent="textSearch">Submit</button>
-        </form>
+        <div class="header">
+            <h1>Where Can I Go?</h1>
+            <h2>
+                Berlin is slowly coming back to life. Check the map to see
+                what's opening back up and what's still restricted.
+            </h2>
+            <form>
+                <!-- <input
+                    type="text"
+                    id="placeSearch"
+                    placeholder="Search for a specific place"
+                    v-model="placeSearchQuery"
+                />
+                <button @click.prevent="placeSearch">Submit</button> -->
+                <input
+                    type="text"
+                    id="textSearch"
+                    placeholder="Search for a place"
+                    v-model="textSearchQuery"
+                />
+                <button @click.prevent="textSearch">Search</button>
+            </form>
+        </div>
         <div class="map-container">
             <div class="search-results-container">
                 <div
@@ -45,6 +52,7 @@
 // based on place type, display information about whether the place is open or not
 
 import googleInit from "../utils/gmaps";
+import getInfoWindowContent from "../utils/info-window-content";
 import axios from "axios";
 export default {
     name: "Map",
@@ -110,24 +118,24 @@ export default {
             let infowindow = new google.maps.InfoWindow();
             this.infoWindow = infowindow;
         },
-        placeSearch() {
-            this.deleteMarkers();
-            axios
-                .get(
-                    `${process.env.VUE_APP_API_URL}/place/specific/${this.placeSearchQuery}`
-                )
-                .then(({ data }) => {
-                    console.log("Place search data: ", data.places);
-                    // add results to search results div
-                    this.searchResults = data.places;
-                    // add markers to map?
-                    this.addMarkers(this.searchResults);
-                    this.placeSearchQuery = "";
-                })
-                .catch(err => {
-                    console.log("Error in place search: ", err);
-                });
-        },
+        // placeSearch() {
+        //     this.deleteMarkers();
+        //     axios
+        //         .get(
+        //             `${process.env.VUE_APP_API_URL}/place/specific/${this.placeSearchQuery}`
+        //         )
+        //         .then(({ data }) => {
+        //             console.log("Place search data: ", data.places);
+        //             // add results to search results div
+        //             this.searchResults = data.places;
+        //             // add markers to map?
+        //             this.addMarkers(this.searchResults);
+        //             this.placeSearchQuery = "";
+        //         })
+        //         .catch(err => {
+        //             console.log("Error in place search: ", err);
+        //         });
+        // },
         textSearch() {
             this.deleteMarkers();
             axios
@@ -172,74 +180,67 @@ export default {
                                 )
                     );
                     console.log("marker match found? ", markerMatch);
-                    let content = this.getInfoWindowContent(this.placeDetails);
+                    let content = getInfoWindowContent(this.placeDetails);
                     this.infoWindow.setContent(content);
                     this.infoWindow.open(this.map, markerMatch);
                 })
                 .catch(err => {
                     console.log("Error getting place details: ", err);
                 });
-        },
-        getInfoWindowContent(place) {
-            let dynamicContent = "";
-            // business_status field not being returned for some reason
-            // if (place.business_status == "CLOSED_TEMPORARILY") {
-            //     dynamicContent += `
-            //     <h3 class="closed">This business is currently marked as temporarily closed due to COVID-19.</h3>
-            //     `;
-            // }
-            for (let i = 0; i < place.types.length; i++) {
-                if (place.types[i] == "park") {
-                    dynamicContent += `
-                            <h2 class="open">Open</h2>
-                            <h3>Parks are open to the public, provided that social distance is maintained. On permanently installed seating (such as benches), the minimum distance is 1.5 m. In meadows and open spaces, the minimum distance is 5 m.</h3>`;
-                    break;
-                }
-                if (place.types[i] == "museum") {
-                    dynamicContent += `
-                            <h2 class="soon-open">Permitted to open from 04 May, 2020</h2>
-                            <h3>Go and reflect on past civilizations while keeping your distance to preserve the current one.</h3>
-                        `;
-                    break;
-                }
-                if (place.types[i] == "hair_care") {
-                    dynamicContent += `
-                        <h2 class="soon-open">Permitted to open from 04 May, 2020</h2>
-                        <h3>Finally you can get a haircut!</h3>
-                    `;
-                    break;
-                }
-                if (
-                    place.types[i] == "supermarket" ||
-                    place.types[i] == "pharmacy" ||
-                    place.types[i] == "convenience_store" ||
-                    place.types[i] == "grocery_or_supermarket" ||
-                    place.types[i] == "drugstore"
-                ) {
-                    dynamicContent += `
-                        <h2 class="open">Open</h2>
-                        <h3>All retail outlets selling essential supplies such as food and medication will remain open</h3>
-                    `;
-                    break;
-                }
-            }
-
-            const content = `
-            <div class="info-window-content">
-                <h1>${place.name}</h1>
-                <div class="dynamic-content">${dynamicContent}</div>
-            </div>
-            `;
-            return content;
         }
     }
 };
 </script>
 
 <style>
+.header {
+    display: flex;
+    height: 150px;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+input[type="text"] {
+    border-radius: 5px;
+    font-size: larger;
+    outline: none;
+    height: 40px;
+    width: 300px;
+    margin: 5px;
+}
+
+input[type="text"]:focus {
+    border: 3px outset grey;
+}
+
+::placeholder {
+    font-size: larger;
+}
+
+button {
+    height: 40px;
+    width: 100px;
+    font-size: larger;
+    font-weight: bolder;
+    border-radius: 5px;
+    background: whitesmoke;
+    color: black;
+    margin: 10px 0 10px 0;
+}
+
+button:hover {
+    background: black;
+    color: whitesmoke;
+    cursor: pointer;
+}
+
+form {
+}
+
 .map-container {
     display: flex;
-    height: 600px;
+    height: 500px;
     width: 100%;
     justify-content: space-between;
 }
@@ -278,7 +279,7 @@ export default {
     color: green;
 }
 
-.soon-open {
+.restricted {
     color: orange;
 }
 
