@@ -54,4 +54,22 @@ app.get("/place/details/:id", async (req, res) => {
     }
 });
 
+app.get("/place/nearby/:location", async (req, res) => {
+    try {
+        console.log("location: ", req.params.location);
+        // make random request until we get some results
+        let results = [];
+        do {
+            const { data } = await services.getPlacesNearby(
+                "52.539507,13.4104319"
+            );
+            results = data.results;
+        } while (results.length == 0);
+        res.json({ places: results });
+        console.log("nearby places: ", results);
+    } catch (err) {
+        console.log("get places nearby error: ", err);
+    }
+});
+
 app.listen(process.env.PORT || 3000, () => console.log("server listening..."));

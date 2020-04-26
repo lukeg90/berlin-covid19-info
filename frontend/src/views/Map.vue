@@ -2,26 +2,30 @@
     <div>
         <div class="header">
             <h1>Where Can I Go?</h1>
-            <h2>
+            <h3>
                 Berlin is slowly coming back to life. Check the map to see
                 what's opening back up and what's still restricted.
-            </h2>
-            <form>
-                <!-- <input
+            </h3>
+            <!-- <input
                     type="text"
                     id="placeSearch"
                     placeholder="Search for a specific place"
                     v-model="placeSearchQuery"
                 />
                 <button @click.prevent="placeSearch">Submit</button> -->
+            <div class="queries">
                 <input
                     type="text"
                     id="textSearch"
                     placeholder="Search for a place"
                     v-model="textSearchQuery"
                 />
-                <button @click.prevent="textSearch">Search</button>
-            </form>
+                <button @click="textSearch">Search</button>
+                <span>OR</span>
+                <button class="nearby-button" @click="nearbySearch">
+                    See what's open around me
+                </button>
+            </div>
         </div>
         <div class="map-container">
             <div class="search-results-container">
@@ -32,7 +36,7 @@
                     @click="getPlaceDetails(result)"
                 >
                     <h3>{{ result.name }}</h3>
-                    <h4>{{ result.formatted_address }}</h4>
+                    <h4>{{ result.formatted_address || result.vicinity }}</h4>
                 </div>
             </div>
             <div class="map"></div>
@@ -152,11 +156,44 @@ export default {
                     console.log("Error in text search: ", err);
                 });
         },
+        nearbySearch() {
+            this.deleteMarkers();
+            // get geolocation
+            let self = this;
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const geolocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    const locationString = `${geolocation.lat},${geolocation.lng}`;
+                    console.log("geolocation: ", locationString);
+                    axios
+                        .get(
+                            `${process.env.VUE_APP_API_URL}/place/nearby/${locationString}`
+                        )
+                        .then(({ data }) => {
+                            console.log("nearby places: ", data.places);
+                            // self.map.setCenter(geolocation);
+                            self.map.setCenter({
+                                lat: 52.539507,
+                                lng: 13.4104319
+                            });
+                            self.map.setZoom(14);
+                            self.searchResults = data.places;
+                            self.addMarkers(self.searchResults);
+                            console.log("response for nearby search: ", data);
+                        });
+                });
+            } else {
+                alert("Sorry, your browser does not support geolocation");
+            }
+        },
         getPlaceDetails(place) {
             // pan to location, set zoom
             console.log("place: ", place.name);
             this.map.panTo(place.geometry.location);
-            this.map.setZoom(14);
+            this.map.setZoom(16);
             // call backend
             axios
                 .get(
@@ -198,7 +235,7 @@ export default {
     height: 150px;
     flex-direction: column;
     justify-content: space-around;
-    align-items: center;
+    margin: 10px;
 }
 
 input[type="text"] {
@@ -207,7 +244,6 @@ input[type="text"] {
     outline: none;
     height: 40px;
     width: 300px;
-    margin: 5px;
 }
 
 input[type="text"]:focus {
@@ -216,6 +252,12 @@ input[type="text"]:focus {
 
 ::placeholder {
     font-size: larger;
+}
+
+.queries span {
+    font-size: x-large;
+    font-weight: bolder;
+    margin: 0 50px 0 50px;
 }
 
 button {
@@ -235,9 +277,10 @@ button:hover {
     cursor: pointer;
 }
 
-form {
+.nearby-button {
+    width: 300px;
+    height: 40px;
 }
-
 .map-container {
     display: flex;
     height: 500px;
@@ -254,16 +297,15 @@ form {
 }
 
 .search-result {
-    height: 15%;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    padding: 10px;
+    padding: 20px;
 }
 
 .search-result:hover {
     cursor: pointer;
-    background: lightseagreen;
+    background: rgba(27, 139, 87, 0.342);
 }
 
 .map {
@@ -273,6 +315,18 @@ form {
 }
 
 .info-window-content {
+    padding: 10px;
+    background: rgba(27, 139, 87, 0.342);
+    border-radius: 10px;
+    font-family: "Lato", sans-serif;
+}
+
+.info-window-content h1 {
+    font-size: x-large;
+}
+
+.dynamic-content h2 {
+    margin-bottom: 10px;
 }
 
 .open {

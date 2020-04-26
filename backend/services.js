@@ -44,6 +44,23 @@ exports.textSearch = textQuery => {
     );
 };
 
+exports.getPlacesNearby = location => {
+    return axios.get(
+        "https://maps.googleapis.com/maps/api/place/nearbysearch/json",
+        {
+            params: {
+                key: API_KEY,
+                location: location,
+                radius: "1000",
+                language: "en",
+                fields:
+                    "business_status,formatted_address,geometry,icon,name,photo,place_id,type,url,vicinity,website",
+                type: getRandomType()
+            }
+        }
+    );
+};
+
 exports.getPlaceDetails = placeId => {
     return axios.get(
         "https://maps.googleapis.com/maps/api/place/details/json",
@@ -53,8 +70,40 @@ exports.getPlaceDetails = placeId => {
                 place_id: placeId,
                 language: "en",
                 fields:
-                    "address_component,adr_address,business_status,formatted_address,geometry,icon,name,permanently_closed,photo,place_id,plus_code,type,url,utc_offset,vicinity,website"
+                    "business_status,formatted_address,geometry,icon,name,photo,place_id,type,url,vicinity,website"
             }
         }
     );
+};
+
+const getRandomType = () => {
+    const types = [
+        "art_gallery",
+        "bicycle_store",
+        "book_store",
+        "cemetery",
+        "church",
+        "convenience_store",
+        "drugstore",
+        "florist",
+        "hair_care",
+        "laundry",
+        "library",
+        "meal_delivery",
+        "meal_takeaway",
+        "museum",
+        "park",
+        "pet_store",
+        "pharmacy",
+        "post_office",
+        "subway_station",
+        "supermarket",
+        "bank",
+        "natural_feature",
+        "place_of_worship",
+        "town_square"
+    ];
+    const randomType = types[Math.floor(Math.random() * types.length)];
+    console.log("Random type: ", randomType);
+    return randomType;
 };

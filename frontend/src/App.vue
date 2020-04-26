@@ -4,11 +4,11 @@
             <router-link to="/" @click.native.stop="showStats = true"
                 >Home</router-link
             >
-            <router-link to="/about">About</router-link>
             <router-link to="/map">Map</router-link>
             <a href="javascript:void(0)" @click.stop="showStats = !showStats"
                 >Stats</a
             >
+            <router-link to="/about">About</router-link>
         </div>
         <CovidStats :show="showStats" />
         <router-view />
