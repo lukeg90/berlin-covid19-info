@@ -193,6 +193,11 @@ export default function getInfoWindowContent(place) {
             `;
             break;
         }
+        dynamicContent = `
+            <h2 class="restricted">Maybe?</h2>
+            <h3>No information available.</h3>
+            ${websiteLink}
+        `;
     }
     const content = `
             <div class="info-window-content">
@@ -201,6 +206,8 @@ export default function getInfoWindowContent(place) {
                 <hr>
                 <br />
                 <div class="dynamic-content">${dynamicContent}</div>
+                <br />
+                <hr>
                 <br />
                 <a target="_blank" href=${place.url}>View on Google Maps</a>
             </div>

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="map-view">
         <div class="header">
             <h1>Where Can I Go?</h1>
             <h3>
@@ -31,9 +31,13 @@
             <div class="search-results-container">
                 <div
                     class="search-result"
+                    :class="{ highlight: result.place_id == selected }"
                     v-for="result in searchResults"
                     :key="result.place_id"
-                    @click="getPlaceDetails(result)"
+                    @click="
+                        getPlaceDetails(result);
+                        selected = result.place_id;
+                    "
                 >
                     <h3>{{ result.name }}</h3>
                     <h4>{{ result.formatted_address || result.vicinity }}</h4>
@@ -68,7 +72,8 @@ export default {
             searchResults: [],
             placeDetails: {},
             markers: [],
-            infoWindow: ""
+            infoWindow: "",
+            selected: ""
         };
     },
     async mounted() {
@@ -114,6 +119,8 @@ export default {
                 marker.addListener("click", function() {
                     // get place details on click
                     self.getPlaceDetails(place);
+                    // highlight appropriate menu item and scroll to it
+                    self.selected = place.place_id;
                 });
             });
         },
@@ -230,12 +237,15 @@ export default {
 </script>
 
 <style>
+.map-view {
+    padding-top: 80px;
+    height: 100%;
+}
 .header {
     display: flex;
-    height: 150px;
+    height: 20%;
     flex-direction: column;
     justify-content: space-around;
-    margin: 10px;
 }
 
 input[type="text"] {
@@ -283,7 +293,7 @@ button:hover {
 }
 .map-container {
     display: flex;
-    height: 500px;
+    height: 80%;
     width: 100%;
     justify-content: space-between;
 }
@@ -308,6 +318,10 @@ button:hover {
     background: rgba(27, 139, 87, 0.342);
 }
 
+.highlight {
+    background: rgba(27, 139, 87, 0.342);
+}
+
 .map {
     height: 100%;
     width: 60%;
@@ -325,6 +339,14 @@ button:hover {
     font-size: x-large;
 }
 
+.info-window-content h3 {
+    margin: 5px 0 5px 0;
+}
+
+.info-window-content a {
+    color: black;
+}
+
 .dynamic-content h2 {
     margin-bottom: 10px;
 }
@@ -334,10 +356,14 @@ button:hover {
 }
 
 .restricted {
-    color: orange;
+    color: coral;
 }
 
 .closed {
     color: red;
+}
+
+hr {
+    height: 3px;
 }
 </style>

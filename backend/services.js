@@ -100,7 +100,6 @@ const getRandomType = () => {
         "supermarket",
         "bank",
         "natural_feature",
-        "place_of_worship",
         "town_square"
     ];
     const randomType = types[Math.floor(Math.random() * types.length)];

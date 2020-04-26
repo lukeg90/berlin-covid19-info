@@ -2,13 +2,13 @@
     <transition name="slide">
         <div class="stats" v-if="show">
             <h3>
-                Total Cases: <span v-if="stats">{{ stats.count }}</span>
+                Total Cases | <span v-if="stats">{{ stats.count }}</span>
                 <span v-else style="font-size: small"
                     >Waiting for update...</span
                 >
             </h3>
             <h3>
-                Deaths: <span v-if="stats">{{ stats.deaths }}</span>
+                Deaths | <span v-if="stats">{{ stats.deaths }}</span>
                 <span v-else style="font-size: small"
                     >Waiting for update...</span
                 >
@@ -45,12 +45,15 @@ export default {
 <style scoped>
 .stats {
     position: absolute;
+    top: 70px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    height: 35%;
+    align-items: center;
+    height: 25%;
     width: 35%;
-    background: black;
+    background: rgba(25, 36, 28, 0.712);
+    border-radius: 0 20px 20px 0;
     z-index: 1;
 }
 

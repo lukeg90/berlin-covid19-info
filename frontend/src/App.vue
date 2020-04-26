@@ -40,13 +40,19 @@ export default {
     font-family: "Lato", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    height: 100vh;
+    width: 100vw;
 }
 
 #nav {
-    width: 100vw;
+    width: 100%;
+    height: 10%;
     padding: 30px;
     background: whitesmoke;
     text-align: center;
+    position: fixed;
+    top: 0;
+    z-index: 3;
 }
 
 #nav a {
