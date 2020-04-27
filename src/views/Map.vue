@@ -133,9 +133,7 @@ export default {
             this.deleteMarkers();
             this.activeSearch = true;
             axios
-                .get(
-                    `${process.env.VUE_APP_API_URL}/place/general/${this.textSearchQuery}`
-                )
+                .get(`place/general/${this.textSearchQuery}`)
                 .then(({ data }) => {
                     console.log("Text search data: ", data.places);
                     this.searchResults = data.places;
@@ -159,7 +157,7 @@ export default {
                     const locationString = `${geolocation.lat},${geolocation.lng}`;
                     console.log("geolocation: ", locationString);
                     axios
-                        .get(`/place/nearby/${locationString}`)
+                        .get(`place/nearby/${locationString}`)
                         .then(({ data }) => {
                             console.log("nearby places: ", data.places);
                             // self.map.setCenter(geolocation);
@@ -184,7 +182,7 @@ export default {
             this.map.setZoom(16);
             // call backend
             axios
-                .get(`/place/details/${place.place_id}`)
+                .get(`place/details/${place.place_id}`)
                 .then(({ data }) => {
                     console.log("Place details: ", data.details);
                     this.placeDetails = data.details;

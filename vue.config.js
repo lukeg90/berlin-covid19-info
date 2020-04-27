@@ -1,3 +1,13 @@
+const path = require("path");
+
 module.exports = {
-  lintOnSave: false
-}
+    outputDir: path.resolve(__dirname, "./backend/public"),
+    devServer: {
+        proxy: {
+            "/": {
+                target: "http://localhost:3000"
+            }
+        }
+    },
+    lintOnSave: false
+};

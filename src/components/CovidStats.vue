@@ -30,7 +30,7 @@ export default {
     },
     mounted() {
         axios
-            .get(`$/covid-stats`)
+            .get(`covid-stats`)
             .then(response => {
                 console.log("RKI data: ", response.data);
                 this.stats = response.data.berlinStats;

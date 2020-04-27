@@ -1,11 +1,11 @@
-let secrets;
-if (process.env.NODE_ENV == "production") {
-    secrets = process.env;
+const secrets = require("../../secrets");
+let API_KEY;
+if (process.env.NODE_ENV == "development") {
+    API_KEY = secrets.MAPS_DEV_KEY;
 } else {
-    secrets = require("../../secrets");
+    API_KEY = secrets.MAPS_PROD_KEY;
 }
 
-const API_KEY = secrets.MAPS_KEY;
 const CALLBACK_NAME = "googleCallback";
 
 let initialized = !!window.google;
