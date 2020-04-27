@@ -1,0 +1,15 @@
+version: "3"
+services:
+    backend:
+        build: backend
+        environment:
+            PORT: "3000"
+        ports:
+            - 3000:3000
+    frontend:
+        build: frontend
+        environment:
+            VUE_APP_API_URL: "http://localhost:3000"
+            PORT: "8081"
+        ports:
+            - 8081:8081
