@@ -159,9 +159,7 @@ export default {
                     const locationString = `${geolocation.lat},${geolocation.lng}`;
                     console.log("geolocation: ", locationString);
                     axios
-                        .get(
-                            `${process.env.VUE_APP_API_URL}/place/nearby/${locationString}`
-                        )
+                        .get(`/place/nearby/${locationString}`)
                         .then(({ data }) => {
                             console.log("nearby places: ", data.places);
                             // self.map.setCenter(geolocation);
@@ -186,9 +184,7 @@ export default {
             this.map.setZoom(16);
             // call backend
             axios
-                .get(
-                    `${process.env.VUE_APP_API_URL}/place/details/${place.place_id}`
-                )
+                .get(`/place/details/${place.place_id}`)
                 .then(({ data }) => {
                     console.log("Place details: ", data.details);
                     this.placeDetails = data.details;
