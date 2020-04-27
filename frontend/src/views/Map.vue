@@ -6,21 +6,15 @@
                 Berlin is slowly coming back to life. Check the map to see
                 what's opening back up and what's still restricted.
             </h3>
-            <!-- <input
-                    type="text"
-                    id="placeSearch"
-                    placeholder="Search for a specific place"
-                    v-model="placeSearchQuery"
-                />
-                <button @click.prevent="placeSearch">Submit</button> -->
             <div class="queries">
                 <input
                     type="text"
                     id="textSearch"
                     placeholder="Search for a place"
                     v-model="textSearchQuery"
+                    @keyup.enter="textSearch"
                 />
-                <button @click="textSearch">Search</button>
+                <!-- <button @click="textSearch">Search</button> -->
                 <span>OR</span>
                 <button class="nearby-button" @click="nearbySearch">
                     See what's open around me
@@ -41,6 +35,12 @@
                 >
                     <h3>{{ result.name }}</h3>
                     <h4>{{ result.formatted_address || result.vicinity }}</h4>
+                </div>
+                <div
+                    class="no-results"
+                    v-if="activeSearch && searchResults.length == 0"
+                >
+                    <h3>No results</h3>
                 </div>
             </div>
             <div class="map"></div>
@@ -67,13 +67,13 @@ export default {
     data: () => {
         return {
             map: "",
-            placeSearchQuery: "",
             textSearchQuery: "",
             searchResults: [],
             placeDetails: {},
             markers: [],
             infoWindow: "",
-            selected: ""
+            selected: "",
+            activeSearch: false
         };
     },
     async mounted() {
@@ -129,26 +129,9 @@ export default {
             let infowindow = new google.maps.InfoWindow();
             this.infoWindow = infowindow;
         },
-        // placeSearch() {
-        //     this.deleteMarkers();
-        //     axios
-        //         .get(
-        //             `${process.env.VUE_APP_API_URL}/place/specific/${this.placeSearchQuery}`
-        //         )
-        //         .then(({ data }) => {
-        //             console.log("Place search data: ", data.places);
-        //             // add results to search results div
-        //             this.searchResults = data.places;
-        //             // add markers to map?
-        //             this.addMarkers(this.searchResults);
-        //             this.placeSearchQuery = "";
-        //         })
-        //         .catch(err => {
-        //             console.log("Error in place search: ", err);
-        //         });
-        // },
         textSearch() {
             this.deleteMarkers();
+            this.activeSearch = true;
             axios
                 .get(
                     `${process.env.VUE_APP_API_URL}/place/general/${this.textSearchQuery}`
@@ -243,9 +226,10 @@ export default {
 }
 .header {
     display: flex;
-    height: 20%;
+    height: 25%;
     flex-direction: column;
     justify-content: space-around;
+    padding: 20px;
 }
 
 input[type="text"] {
@@ -262,6 +246,10 @@ input[type="text"]:focus {
 
 ::placeholder {
     font-size: larger;
+}
+
+.queries {
+    align-self: center;
 }
 
 .queries span {
@@ -293,7 +281,7 @@ button:hover {
 }
 .map-container {
     display: flex;
-    height: 80%;
+    height: 75%;
     width: 100%;
     justify-content: space-between;
 }
@@ -310,6 +298,10 @@ button:hover {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    padding: 20px;
+}
+
+.no-results {
     padding: 20px;
 }
 

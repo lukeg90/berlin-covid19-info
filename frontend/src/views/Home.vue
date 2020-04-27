@@ -33,8 +33,8 @@ export default {
 }
 .title {
     position: absolute;
-    right: 100px;
-    top: 100px;
+    right: 200px;
+    top: 200px;
     width: 500px;
     height: 500px;
 }
