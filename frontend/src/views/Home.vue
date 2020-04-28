@@ -28,18 +28,18 @@ export default {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.5;
+    opacity: 0.9;
     z-index: -1;
 }
 .title {
     position: absolute;
-    right: 200px;
-    top: 200px;
+    right: 250px;
+    top: 250px;
     width: 500px;
     height: 500px;
 }
 .title h1 {
     font-size: 100px;
-    color: black;
+    color: #ffdc00;
 }
 </style>

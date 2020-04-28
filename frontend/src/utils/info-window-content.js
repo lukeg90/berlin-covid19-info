@@ -50,7 +50,7 @@ export default function getInfoWindowContent(place) {
         ) {
             dynamicContent = `
                 <h2 class="open">Open</h2>
-                <h3>All retail outlets selling essential supplies are permitted to be open</h3>
+                <h3>All retail outlets selling essential supplies and services are permitted to be open</h3>
             `;
             break;
         }
@@ -120,6 +120,13 @@ export default function getInfoWindowContent(place) {
             `;
             break;
         }
+        if (place.types[i] == "bar") {
+            dynamicContent = `
+                <h2 class="closed">Closed</h2>
+                <h3>Bars are closed indefinitely. On the plus side, drinking alone has never been as socially acceptable as it is now.</h3>
+            `;
+            break;
+        }
         if (place.business_status == "CLOSED_TEMPORARILY") {
             dynamicContent = `
                 <h2 class="closed">Closed</h2>
@@ -130,7 +137,6 @@ export default function getInfoWindowContent(place) {
         }
         if (
             [
-                "bar",
                 "cafe",
                 "meal_delivery",
                 "meal_takeaway",
@@ -140,7 +146,7 @@ export default function getInfoWindowContent(place) {
         ) {
             dynamicContent = `
                 <h2 class="restricted">May operate with restrictions</h2>
-                <h3>Bars, restaurants, and cafes are not allowed to seat guests, but they may still offer delivery and pick-up service.</h3>
+                <h3>Restaurants and cafes are not allowed to seat guests, but they may still offer delivery and pick-up service.</h3>
                 ${websiteLink}
             `;
             break;

@@ -1,16 +1,15 @@
 <template>
     <div class="map-view">
         <div class="header">
-            <h1>Where Can I Go?</h1>
-            <h3>
+            <h2>
                 Berlin is slowly coming back to life. Check the map to see
                 what's opening back up and what's still restricted.
-            </h3>
+            </h2>
             <div class="queries">
                 <input
                     type="text"
                     id="textSearch"
-                    placeholder="Search for a place"
+                    placeholder="Search for a place..."
                     v-model="textSearchQuery"
                     @keyup.enter="textSearch"
                 />
@@ -131,7 +130,6 @@ export default {
         },
         textSearch() {
             this.deleteMarkers();
-            this.activeSearch = true;
             axios
                 .get(
                     `${process.env.VUE_APP_API_URL}/place/general/${this.textSearchQuery}`
@@ -139,6 +137,7 @@ export default {
                 .then(({ data }) => {
                     console.log("Text search data: ", data.places);
                     this.searchResults = data.places;
+                    this.activeSearch = true;
                     this.addMarkers(this.searchResults);
                     this.textSearchQuery = "";
                 })
@@ -224,12 +223,22 @@ export default {
     padding-top: 80px;
     height: 100%;
 }
+
+.map {
+    border-radius: 10px;
+}
 .header {
     display: flex;
     height: 25%;
     flex-direction: column;
     justify-content: space-around;
     padding: 20px;
+    background: #3d9970;
+    color: #001f3f;
+}
+
+.header h2 {
+    text-align: center;
 }
 
 input[type="text"] {
@@ -238,14 +247,18 @@ input[type="text"] {
     outline: none;
     height: 40px;
     width: 300px;
+    font-weight: bolder;
+    color: #001f3f;
 }
 
 input[type="text"]:focus {
-    border: 3px outset grey;
+    border: 3px outset #001f3f;
 }
 
 ::placeholder {
     font-size: larger;
+    color: #001f3f;
+    opacity: 0.7;
 }
 
 .queries {
@@ -261,17 +274,17 @@ input[type="text"]:focus {
 button {
     height: 40px;
     width: 100px;
-    font-size: larger;
+    font-size: 20px;
     font-weight: bolder;
     border-radius: 5px;
-    background: whitesmoke;
-    color: black;
+    color: #001f3f;
+    background: white;
     margin: 10px 0 10px 0;
 }
 
 button:hover {
-    background: black;
-    color: whitesmoke;
+    color: white;
+    background: #001f3f;
     cursor: pointer;
 }
 
@@ -284,6 +297,7 @@ button:hover {
     height: 75%;
     width: 100%;
     justify-content: space-between;
+    border-top: 5px solid whitesmoke;
 }
 
 .search-results-container {
@@ -292,17 +306,24 @@ button:hover {
     height: 100%;
     width: 40%;
     overflow-y: scroll;
+    background: #001f3f;
+    border-right: 10px solid whitesmoke;
 }
 
+.search-results-container::-webkit-scrollbar {
+    display: none;
+}
 .search-result {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     padding: 20px;
+    color: white;
 }
 
 .no-results {
     padding: 20px;
+    color: white;
 }
 
 .search-result:hover {
@@ -322,9 +343,10 @@ button:hover {
 
 .info-window-content {
     padding: 10px;
-    background: rgba(27, 139, 87, 0.342);
+    background: #001f3f;
     border-radius: 10px;
     font-family: "Lato", sans-serif;
+    color: white;
 }
 
 .info-window-content h1 {
@@ -348,7 +370,7 @@ button:hover {
 }
 
 .restricted {
-    color: coral;
+    color: gold;
 }
 
 .closed {
