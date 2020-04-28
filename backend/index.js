@@ -72,7 +72,9 @@ app.get("/place/nearby/:location", async (req, res) => {
     }
 });
 
+const port = process.env.PORT || 3000;
+
 app.listen(process.env.PORT || 3000, () => {
-    console.log("server listening...");
+    console.log("server listening on port " + port);
     console.log("environment: ", process.env);
 });

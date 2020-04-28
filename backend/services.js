@@ -2,7 +2,7 @@ const axios = require("axios");
 const secrets = require("./secrets");
 
 let API_KEY;
-if (process.env.PORT == 3000) {
+if (!process.env.PORT) {
     API_KEY = secrets.MAPS_DEV_KEY;
 } else {
     API_KEY = process.env.MAPS_KEY;
