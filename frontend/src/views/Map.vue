@@ -33,7 +33,7 @@
                     "
                 >
                     <h3>{{ result.name }}</h3>
-                    <h4>{{ result.formatted_address || result.vicinity }}</h4>
+                    <h5>{{ result.formatted_address || result.vicinity }}</h5>
                 </div>
                 <div
                     class="no-results"
@@ -220,8 +220,7 @@ export default {
 
 <style>
 .map-view {
-    padding-top: 80px;
-    height: 100%;
+    height: 90%;
 }
 
 .map {
@@ -233,8 +232,8 @@ export default {
     flex-direction: column;
     justify-content: space-around;
     padding: 20px;
-    background: #3d9970;
-    color: #001f3f;
+    background: #001f3f;
+    color: white;
 }
 
 .header h2 {
@@ -242,23 +241,27 @@ export default {
 }
 
 input[type="text"] {
-    border-radius: 5px;
+    border-radius: 20px;
     font-size: larger;
     outline: none;
     height: 40px;
     width: 300px;
     font-weight: bolder;
+    background: #ffdc00;
     color: #001f3f;
+    text-indent: 10px;
 }
 
 input[type="text"]:focus {
-    border: 3px outset #001f3f;
+    border: 3px outset white;
 }
 
 ::placeholder {
     font-size: larger;
     color: #001f3f;
-    opacity: 0.7;
+    opacity: 1;
+    vertical-align: middle;
+    text-indent: 10px;
 }
 
 .queries {
@@ -276,16 +279,20 @@ button {
     width: 100px;
     font-size: 20px;
     font-weight: bolder;
-    border-radius: 5px;
+    border-radius: 20px;
     color: #001f3f;
-    background: white;
+    background: #ffdc00;
     margin: 10px 0 10px 0;
 }
 
 button:hover {
-    color: white;
+    color: #ffdc00;
     background: #001f3f;
     cursor: pointer;
+}
+
+button:focus {
+    outline-style: none;
 }
 
 .nearby-button {
@@ -316,7 +323,7 @@ button:hover {
 .search-result {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-between;
     padding: 20px;
     color: white;
 }
@@ -328,11 +335,13 @@ button:hover {
 
 .search-result:hover {
     cursor: pointer;
-    background: rgba(27, 139, 87, 0.342);
+    background: #ffdc00;
+    color: #001f3f;
 }
 
 .highlight {
-    background: rgba(27, 139, 87, 0.342);
+    background: #ffdc00;
+    color: #001f3f;
 }
 
 .map {

@@ -45,7 +45,7 @@ export default {
 <style scoped>
 .stats {
     position: absolute;
-    top: 70px;
+    top: 10%;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -53,7 +53,7 @@ export default {
     height: 25%;
     width: 35%;
     background: rgba(25, 36, 28, 0.712);
-    border-radius: 0 20px 20px 0;
+    border-radius: 0 0 20px 0;
     z-index: 1;
 }
 

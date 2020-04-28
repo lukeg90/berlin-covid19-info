@@ -19,12 +19,10 @@ export default {
 
 <style scoped>
 .home {
-    position: relative;
-    height: 100%;
+    height: 90%;
     width: 100%;
 }
 .jumbotron {
-    position: fixed;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -36,7 +34,7 @@ export default {
     right: 250px;
     top: 250px;
     width: 500px;
-    height: 500px;
+    height: 400px;
 }
 .title h1 {
     font-size: 100px;
