@@ -1,6 +1,4 @@
 const express = require("express");
-const serveStatic = require("serve-static");
-const path = require("path");
 const cors = require("cors");
 const app = express();
 const services = require("./services");
@@ -9,14 +7,9 @@ app.use(cors());
 
 app.use(express.json());
 
-// app.use(express.static("./src"));
-// app.use(express.static("./dist"));
-
-app.use("/", serveStatic(path.join(__dirname, "/dist")));
-
-// app.get(/.*/, function(req, res) {
-//     res.sendFile(path.join(__dirname, "/dist/index.html"));
-// });
+app.get("/", (req, res) => {
+    res.send("<h1>Backend sanity check</h1>");
+});
 
 app.get("/covid-stats", async (req, res) => {
     try {
@@ -79,6 +72,7 @@ app.get("/place/nearby/:location", async (req, res) => {
     }
 });
 
-const port = process.env.PORT || 8080;
-
-app.listen(port, () => console.log("server listening on " + port));
+app.listen(process.env.PORT || 3000, () => {
+    console.log("server listening...");
+    console.log("environment: ", process.env);
+});
