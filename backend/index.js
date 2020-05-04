@@ -61,7 +61,7 @@ app.get("/place/nearby/:location", async (req, res) => {
         let results = [];
         do {
             const { data } = await services.getPlacesNearby(
-                "52.539507,13.4104319"
+                req.params.location
             );
             results = data.results;
         } while (results.length == 0);

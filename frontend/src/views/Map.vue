@@ -167,11 +167,7 @@ export default {
                         .then(({ data }) => {
                             console.log("nearby places: ", data.places);
                             self.activeSearch = true;
-                            // self.map.setCenter(geolocation);
-                            self.map.setCenter({
-                                lat: 52.539507,
-                                lng: 13.4104319
-                            });
+                            self.map.setCenter(geolocation);
                             self.map.setZoom(14);
                             self.searchResults = data.places;
                             self.addMarkers(self.searchResults);
