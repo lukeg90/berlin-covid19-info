@@ -19,3 +19,5 @@
    * Vue CLI 3
    * Google APIs (Maps, Places, Geolocation)
    * Docker
+
+![app gif](https://github.com/lukeg90/spiced-final-project/blob/master/frontend/public/covid-berlin.gif)
