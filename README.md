@@ -1,8 +1,8 @@
 # COVID-19 Information Berlin
 
-### My goal in creating this app was to make something relevant and useful for the current situation in Berlin. The main feature is a map search which can be used to find information on places in Berlin and whether they might be open or not.
-
 ## [Current deployed version](https://covid19info-berlin.herokuapp.com/)
+
+#### My goal in creating this app was to make something relevant and useful for the current situation in Berlin. The main feature is a map search which can be used to find information on places in Berlin and whether they might be open or not.
 
 ## Key Features
 
