@@ -22,6 +22,7 @@
         </div>
         <div class="map-container">
             <div class="search-results-container">
+                <img v-if="!activeSearch" src="../assets/notouching.jpg" />
                 <div
                     class="search-result"
                     :class="{ highlight: result.place_id == selected }"
@@ -110,7 +111,8 @@ export default {
             places.forEach(place => {
                 let marker = new google.maps.Marker({
                     position: place.geometry.location,
-                    map: this.map
+                    map: this.map,
+                    animation: google.maps.Animation.DROP
                 });
                 this.markers.push(marker);
                 let self = this;
@@ -138,6 +140,7 @@ export default {
                     console.log("Text search data: ", data.places);
                     this.searchResults = data.places;
                     this.activeSearch = true;
+                    this.map.setZoom(11);
                     this.addMarkers(this.searchResults);
                     this.textSearchQuery = "";
                 })
@@ -163,6 +166,7 @@ export default {
                         )
                         .then(({ data }) => {
                             console.log("nearby places: ", data.places);
+                            self.activeSearch = true;
                             // self.map.setCenter(geolocation);
                             self.map.setCenter({
                                 lat: 52.539507,
@@ -226,6 +230,7 @@ export default {
 .map {
     border-radius: 10px;
 }
+
 .header {
     display: flex;
     height: 25%;
@@ -242,7 +247,7 @@ export default {
 
 input[type="text"] {
     border-radius: 20px;
-    font-size: larger;
+    font-size: 17px;
     outline: none;
     height: 40px;
     width: 300px;
@@ -257,7 +262,7 @@ input[type="text"]:focus {
 }
 
 ::placeholder {
-    font-size: larger;
+    font-size: 17px;
     color: #001f3f;
     opacity: 1;
     vertical-align: middle;
@@ -277,7 +282,7 @@ input[type="text"]:focus {
 button {
     height: 40px;
     width: 100px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bolder;
     border-radius: 20px;
     color: #001f3f;
@@ -299,6 +304,7 @@ button:focus {
     width: 300px;
     height: 40px;
 }
+
 .map-container {
     display: flex;
     height: 75%;
@@ -315,6 +321,11 @@ button:focus {
     overflow-y: scroll;
     background: #001f3f;
     border-right: 10px solid whitesmoke;
+}
+
+img {
+    object-fit: contain;
+    margin: auto 0;
 }
 
 .search-results-container::-webkit-scrollbar {

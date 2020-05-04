@@ -17,15 +17,15 @@ export default function getInfoWindowContent(place) {
         }
         if (["museum", "art_gallery"].includes(place.types[i])) {
             dynamicContent = `
-                <h2 class="open">Open from 04 May</h2>
+                <h2 class="open">Open</h2>
                 <h3>Go and reflect on past civilizations while keeping your distance to preserve the current one.</h3>
             `;
             break;
         }
         if (place.types[i] == "hair_care") {
             dynamicContent = `
-                <h2 class="restricted">Open from 04 May with restrictions</h2>
-                <h3>Finally you can get a haircut! Mask or other covering of the mouth and nose is required</h3>
+                <h2 class="restricted">Open with restrictions</h2>
+                <h3>Finally! Mask or other covering of the mouth and nose is required</h3>
             `;
             break;
         }
@@ -71,7 +71,7 @@ export default function getInfoWindowContent(place) {
             ].includes(place.types[i])
         ) {
             dynamicContent = `
-                <h2 class="restricted">Open from 04 May with restrictions</h2>
+                <h2 class="restricted">Open with restrictions</h2>
                 <h3>All religious gatherings of up to 50 people are allowed, space permitting. But please do not attempt to pass off your house party as a gathering of the Church of the Flying Spaghetti Monster.</h3>
             `;
             break;
@@ -195,7 +195,7 @@ export default function getInfoWindowContent(place) {
         ) {
             dynamicContent = `
                 <h2 class="open">Open</h2>
-                <h3>School is back in session.</h3>
+                <h3>School is back in session. Listen closely and you can hear the collective sigh of Berlin's students.</h3>
             `;
             break;
         }
